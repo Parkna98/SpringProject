@@ -14,13 +14,18 @@
   margin: 0px auto;
   width: 800px;
 }
+.row1{
+  width: 600px;
+  
+}
 </style>
 <script src="https://unpkg.com/vue@3"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 </head>
 <body>
-  <div class="container">
+  <jsp:include page="${login_jsp}"></jsp:include>
+  <div class="container" id="app1">
     <div class="row">
       <table class="table">
         <tr>
@@ -28,7 +33,7 @@
            <img :src="'https://www.menupan.com'+vo.poster" style="width:100%">
           </td>
           <td colspan="2">
-            <h3>{{vo.name}}&nbsp;<span style="color:orange">{{vo.score}}</span></h3>
+            <h3><span id="name">{{vo.name}}</span>&nbsp;<span style="color:orange">{{vo.score}}</span></h3>
           </td>
         </tr>
         <tr>
@@ -45,7 +50,11 @@
         </tr>
         <tr>
           <td class="text-center" width="10%">테마</td>
-          <td width="60%">{{vo.theme}}</td>
+          <td width="60%">
+            <ul>
+              <li v-for="t in theme">{{t}}</li>
+            </ul>
+          </td>
         </tr>
         <tr>
           <td class="text-center" width="10%">가격대</td>
@@ -59,6 +68,11 @@
           <td class="text-center" width="10%">좌석</td>
           <td width="60%">{{vo.seat}}</td>
         </tr>
+        <tr>
+          <td colspan=3 class="text-right">
+            <input type="button" value="목록" class="btn btn-xs btn-primary" onclick="javascript:history.back()">
+          </td>
+        </tr>
       </table>
     </div>
     <div style="height: 20px"></div>
@@ -68,6 +82,11 @@
       </div>
     </div>
   </div>
+  <div class="container" id="app2"> 
+    <div class="row row1">
+      
+    </div>
+  </div>
   <script>
     let app=Vue.createApp({
     	data(){
@@ -75,7 +94,9 @@
 				vo:{},
 				fno:${fno},
 				address:'',
-				name:''
+				name:'',
+				theme:[],
+				sessionId:''
     		}
     	},
     	mounted(){
@@ -86,6 +107,7 @@
     		}).then(response=>{
     			console.log(response.data)
     			this.vo=response.data
+    			this.theme=response.data.theme.split(",")
     			this.address=response.data.address
     			this.name=response.data.name
     			if(window.kakao && window.kakao.maps){
@@ -150,7 +172,12 @@
     		
     		}
     	}
-    }).mount('.container')
+    }).mount('#app1')
+    
+    // 댓글 
+    let app2=Vue.createApp({
+    	
+    }).mount('#app2')
   </script>
 </body>
 </html>

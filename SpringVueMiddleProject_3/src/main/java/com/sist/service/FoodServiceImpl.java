@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sist.dao.FoodDAO;
+import com.sist.dao.MemberDAO;
 //결합성이 낮게 만들기
 //인터페이스를 통해 dao를 가져온다
 import com.sist.vo.FoodVO;
+import com.sist.vo.MemberVO;
 
 //BI => DAO / Manager 를 여러개 통합해서 사용 => 결합성이 낮은 프로그램 => 스프링에서 권장
 import java.util.*;
@@ -19,6 +21,10 @@ import java.util.*;
 public class FoodServiceImpl implements FoodService{
 	@Autowired
 	private FoodDAO dao;
+	
+	@Autowired
+	private MemberDAO mDao;
+	
 
 	@Override
 	public List<FoodVO> foodListData(int start, int end) {
@@ -36,5 +42,11 @@ public class FoodServiceImpl implements FoodService{
 	public FoodVO foodDetailDate(int fno) {
 		// TODO Auto-generated method stub
 		return dao.foodDetailDate(fno);
+	}
+
+	@Override
+	public MemberVO isLogin(String id, String pwd) {
+		// TODO Auto-generated method stub
+		return mDao.isLogin(id, pwd);
 	}
 }

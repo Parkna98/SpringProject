@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
  * 	오라클 : ROW, 자바 : 객체, 자바스크립트 : {}
  */
 import java.util.*;
+
+import javax.servlet.http.HttpSession;
+
 import com.sist.vo.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,8 +61,12 @@ public class FoodRestController {
 	}
 	// 상세보기
 	@GetMapping(value="food/detail_vue.do",produces = "text/plain;charset=UTF-8")
-	public String food_detail(int fno) throws JsonProcessingException {
+	public String food_detail(int fno,HttpSession session) throws JsonProcessingException {
 		FoodVO vo=service.foodDetailDate(fno);
+		String id=(String)session.getAttribute("id");
+		if(id==null)
+			id="";
+		vo.setSessionId(id); // 임시로 세션아이디 저장 => 댓글 사용시 본인확인용(수정,삭제)
 		ObjectMapper mapper=new ObjectMapper();
 		String json=mapper.writeValueAsString(vo);
 		
